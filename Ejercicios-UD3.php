@@ -64,6 +64,68 @@
         ?>
         <hr/>
         <!---Ejercicio 4--->
-        
+        <hr/>
+        <!---Ejercicio 5--->
+        <form>
+            <p> Inserta los minutos que ha durado la llamada: </p>
+            <input type="number" name="duracion" />
+            <input type="submit" value="Calcular precio" />
+        </form>
+        <?php
+            $duracion = $_GET["duracion"];
+            $precio = 10;
+
+            if ($duracion > 3) {
+                $duracion -= 3;
+                $precio += $duracion*5;
+            }
+
+            echo "<p>La llamada ha costado ".$precio." céntimos</p>";
+        ?>
+        <hr/>
+        <!---Ejercicio 6--->
+        <form>
+            <p><label>Numero 1</label><input type="number" name="iguales1" /></p>
+            <p><label>Numero 2</label><input type="number" name="iguales2" /></p>
+            <p><label>Numero 3</label><input type="number" name="iguales3" /></p>
+            <input type="submit" value="Comprobar iguales"/>
+        </form>
+        <?php
+            $iguales1 = $_GET["iguales1"];
+            $iguales2 = $_GET["iguales2"];
+            $iguales3 = $_GET["iguales3"];
+
+            if($iguales1 == $iguales2 && $iguales1 == $iguales3) {
+                echo "<p> Hay tres números iguales a ".$iguales1."</p>";
+            } elseif ($iguales1 == $iguales2 || $iguales1 == $iguales3) {
+                echo "<p> Hay dos números iguales a ".$iguales1."</p>";
+            } elseif ($iguales2 == $iguales3) {
+                echo "<p> Hay dos números iguales a ".$iguales2."</p>";
+            } else {
+                echo "<p> No hay números iguales </p>";
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 7--->
+        <hr/>
+        <!---Ejercicio 8--->
+        <form>
+            <p><label>Numero: </label><input type="number" name="tabla"/></p>
+            <input type="submit" value="Sacar Tabla de multiplicar"/>
+        </form>
+        <?php
+            $ntabla=$_GET["tabla"];
+
+            for ($i=1; $i<11 ; $i++) { 
+                echo "<p> " . $ntabla . " * " . $i . " = " . ($ntabla*$i) . " </p>";
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 9--->
+        <?php
+            $fact = rand(1,15);
+            $res = gmp_fact($fact);
+            echo "<p>".$fact."! = ".$res."</p>";
+        ?>
     </body>
 </html>

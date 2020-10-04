@@ -295,16 +295,68 @@
         ?>
         <hr/>
         <!---Ejercicio 15--->
-        <form>
-            <p><label>Numero: </label><input type="number" name="tabla"/></p>
-            <input type="submit" value="Sacar Tabla de multiplicar"/>
-        </form>
-            <?php
-                $ntabla=$_GET["tabla"];
-
-                for ($i=1; $i<11 ; $i++) { 
-                    echo "<p> " . $ntabla . " * " . $i . " = " . ($ntabla*$i) . " </p>";
+        <?php
+            $ingles = array("house","car","tree","dog","key","door","window","computer","phone","table");
+            for ($i=0; $i < 10; $i++) { 
+                switch ($ingles[$i]) {
+                    case 'house':
+                        echo "<p> House - Casa </p>";
+                        break;
+                    case 'car':
+                        echo "<p> Car - Coche </p>";
+                        break;
+                    case 'tree':
+                        echo "<p> Tree - Arbol </p>";
+                        break;
+                    case 'dog':
+                        echo "<p> Dog - Perro </p>";
+                        break;
+                    case 'key':
+                        echo "<p> Key - Llave </p>";
+                        break;
+                    case 'door':
+                        echo "<p> Door - Puerta </p>";
+                        break;
+                    case 'window':
+                        echo "<p> Window - Ventana </p>";
+                        break;
+                    case 'computer':
+                        echo "<p> Computer - Ordenador </p>";
+                        break;
+                    case 'phone':
+                        echo "<p> Phone - Telefono </p>";
+                        break;
+                    case 'table':
+                        echo "<p> Table - Mesa </p>";
+                        break;
+                    default:
+                        break;
                 }
-            ?>
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 16--->
+        <form>
+            <p>Inserta la cantidad en euros </p>
+            <input type="number" name="euros" />
+            <input type="submit" value="Convertir" />
+        </form>
+        <?php
+            $euros = $_GET["euros"];
+            $pesetas = sprintf("%.2f" ,$euros * 166.386);
+            echo "<p> ".$euros."€ son ".$pesetas." pesetas </p>";
+        ?>
+        <hr/>
+        <!---Ejercicio 17--->
+        <form>
+            <p>Inserta la cantidad en pesetas </p>
+            <input type="text" name="pesetas" />
+            <input type="submit" value="Convertir" />
+        </form>
+        <?php
+            $pesetas2 = $_GET["pesetas"];
+            $euros2 = sprintf("%.2f" , $pesetas2 / 166.386);
+            echo "<p> ".$pesetas2." pesetas son ".$euros2."€ </p>";
+        ?>
     </body>
 </html>
