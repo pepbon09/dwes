@@ -125,7 +125,19 @@
         <?php
             $fact = rand(1,15);
             $res = gmp_fact($fact);
-            echo "<p>".$fact."! = ".$res."</p>";
+            echo "<p>" . $fact . "! = " . $res . "</p>";
+        ?>
+        <hr/>
+        <!---Ejercicio 10--->
+        <?php
+            $sumatorio = rand(1,20);
+            $sum = 0;
+
+            for ($i=$sumatorio; $i > 0; $i--) { 
+                $sum += $i;
+            }
+
+            echo "<p> Sumatorio de " . $sumatorio . " = " . $sum . " </p>";
         ?>
     </body>
 </html>
