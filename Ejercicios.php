@@ -36,6 +36,7 @@
         </form>
         <br/>
         <?php
+            #Recogo los datos del formulario con la superglobal GET
             $num1=$_GET["num1"];
             $num2=$_GET["num2"];
             echo '<p>' . $num1 . ' + ' . $num2 . ' = ' . ($num1+$num2) . ' </p>';
@@ -47,6 +48,7 @@
         <!---Ejercicio 5--->
         <table>
                 <?php
+                    #Creo las variables y les asigno un valor inicial
                     $a=5;
                     $b=7;
                     $c=2;
@@ -172,6 +174,7 @@
         </form>
             <?php
                 $decimal=$_GET["decimal"];
+                #Uso la funcion php.round que redondea el numero que paso como parametro
                 $decimal=round($decimal);
                 echo '<p> Resultado: ' . $decimal . '</p>';
             ?>
@@ -191,6 +194,8 @@
                 $med3=$_GET["med3"];
                 $med4=$_GET["med4"];
                 $med5=$_GET["med5"];
+                /*Una vez tenga todas las medias, las sumo y las divido entre 5,
+                  luego redondeo el resultado*/
                 $media=round(($med1+$med2+$med3+$med4+$med5)/5);
                 echo '<p> La media es de ' . $media . '</p>';
             ?>
@@ -207,9 +212,11 @@
                 $ord2=$_GET["ord2"];
                 $ord3=$_GET["ord3"];
 
+                #Si algun numero es igual que otro, saltara la alarma de js
                 if($ord1 == $ord2 || $ord1 == $ord3 || $ord2 == $ord3) {
                     echo "<script type='text/javascript'>alert('Has escogido 2 o mas numeros iguales');</script>";
-                } else {
+                } else { #Si no es el caso...
+                    #Almaceno los numeros en un array, para luego ordenarlo e imprimirlo
                     $nums = array($ord1, $ord2, $ord3);
                     rsort($nums);
                     foreach ($nums as $num) {
@@ -220,10 +227,12 @@
         <hr/>
         <!---Ejercicio 10--->
         <h1>
-            <?php 
+            <?php
+                #Saco un numero aleatorio entre 1 y 100 con la funcion php.rand
                 $al=rand(1,100);
                 echo $al . '</h1>';
             
+                #Dependiendo del numero generado, se imprimira una linea diferente
                 if($al>50) {
                     echo "<p class='verde'> Mayor </p>";
                 } elseif ($al<50) {
@@ -236,6 +245,8 @@
         <!---Ejercicio 11--->
         <p>Hoy es: </p>
         <?php
+            /*Obtengo la fecha y hora actual del sistema mediante date(), el parametro "j" indica
+              el dia del mes*/
             echo "<h1> " . date("j") . " </h1>";
 
             if (date("j")<=15) {
@@ -253,6 +264,7 @@
             $numero=rand(1,5);
             echo '<p> ' . $numero . '-';
 
+            #Dependiendo del numero generado, se devolvera la cadena correspondiente
             switch ($numero) {
                 case 1:
                     echo 'uno';
@@ -296,7 +308,9 @@
         <hr/>
         <!---Ejercicio 15--->
         <?php
+            #Introduzco las palabras en ingles en un array
             $ingles = array("house","car","tree","dog","key","door","window","computer","phone","table");
+            #Creo un bucle en el que uso el contador como indice para buscar las traducciones en el array
             for ($i=0; $i < 10; $i++) { 
                 switch ($ingles[$i]) {
                     case 'house':
@@ -343,6 +357,7 @@
         </form>
         <?php
             $euros = $_GET["euros"];
+            #Guardare el resultado de la conversion formateado en una variable, de manera que solo se muestren 2 decimales
             $pesetas = sprintf("%.2f" ,$euros * 166.386);
             echo "<p> ".$euros."€ son ".$pesetas." pesetas </p>";
         ?>

@@ -44,10 +44,17 @@
         <hr/>
         <!---Ejercicio 2--->
         <?php
+            #Recojo el dia de la semana del sistema con date("w")
             $fecha = date("w");
+
+            #Creo un array con los dias de la semana
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
+            
+            #Obtengo la fecha y hora del sistema con getdate(), que pasa un array con todos los datos
             $hora = getdate();
             $formato = "%02d";
+
+            #Guardo las horas, minutos y segundos formateados del array
             $h = sprintf($formato, $hora["hours"]);
             $m = sprintf($formato, $hora["minutes"]);
             $s = sprintf($formato, $hora["seconds"]);
@@ -63,10 +70,16 @@
         </form>
         <?php
             $s = $_GET["s"];
+
+            #Divido los segundos en horas, lo formateo y lo guardo
             $H = sprintf($formato, $s/3600);
+            #Calculo los segundos restantes restandoles las horas en segundos
             $s -= $H * 3600;
+            #Divido los segundos en minutos, lo formateo y lo guardo
             $M = sprintf($formato, $s/60);
+            #Calculo los segundos restantes restandoles los minutos en segundos
             $s -= $M * 60;
+            #Los segundos restantes se formatean y se guardan
             $S = sprintf($formato, $s);
 
             echo "<p> " . $H . ":" . $M . ":" . $S . "</p>";
@@ -86,10 +99,11 @@
             $horas=$_GET["horas"];
             $minutos=$_GET["minutos"];
             $segundos=$_GET["segundos"];
-
+            
+            #Si la hora es entre 0 y 23 y los minutos y segundos son entre 0 y 60, sera valida la fecha
             if (($horas>0 && $horas<24)&&($minutos>0 && $minutos<60)&&($segundos>0 && $segundos<60)) {
                 echo "La hora es valida";
-            } else {
+            } else { #En caso contrario, no sera valida
                 echo "La hora no es valida";
             }
         ?>
@@ -104,8 +118,11 @@
             $duracion = $_GET["duracion"];
             $precio = 10;
 
+            #Si la duracion es mayor que 3
             if ($duracion > 3) {
+                #Restare 3 minutos de la duracion total
                 $duracion -= 3;
+                #Y sumare al precio los minutos restantes multiplicados por 5
                 $precio += $duracion*5;
             }
 
@@ -124,13 +141,17 @@
             $iguales2 = $_GET["iguales2"];
             $iguales3 = $_GET["iguales3"];
 
+            #Si los 3 numeros son iguales, se imprimira el aviso de que hay 3 numeros iguales
             if($iguales1 == $iguales2 && $iguales1 == $iguales3) {
                 echo "<p> Hay tres números iguales a ".$iguales1."</p>";
-            } elseif ($iguales1 == $iguales2 || $iguales1 == $iguales3) {
+            } #Si el primer numero es igual que otro...
+            elseif ($iguales1 == $iguales2 || $iguales1 == $iguales3) {
                 echo "<p> Hay dos números iguales a ".$iguales1."</p>";
-            } elseif ($iguales2 == $iguales3) {
+            } #o el segundo es igual que el tercero, avisara de que hay 2 numeros iguales
+            elseif ($iguales2 == $iguales3) {
                 echo "<p> Hay dos números iguales a ".$iguales2."</p>";
-            } else {
+            } #Si ninguna expresion es verdadera, entonces no habra numeros iguales
+            else {
                 echo "<p> No hay números iguales </p>";
             }
         ?>
@@ -142,12 +163,15 @@
             <input type="submit" value="Calcular diferencia"/>
         </form>
         <?php
+            #Creo una fecha con date_create, le paso date() para que obtenga la fecha del sistema
             $fechaActual=date_create(date());
+            #Creo otra fecha a partir de la cadena introducida en el formulario
             $fechaDeseada=date_create($_GET["fechaDeseada"]);
+            #Obtengo la diferencia entre ambas fechas con la funcion date_diff()
             $interval=date_diff($fechaActual,$fechaDeseada);
-            //$res=date_format('%H Horas y %I minutos' ,$diferencia);
-
-            //echo $interval->format('%H Horas y %I minutos');
+            
+            #la variable interval es un array asociativo donde se guardan todos los datos de la diferencia,
+            #'d' son los dias, 'h' las horas y 'i' los minutos
             echo "<p> Faltan ".$interval->d." dias ,".$interval->h." horas y ".$interval->i." minutos para llegar a esa fecha";
         ?>
         <hr/>
@@ -167,9 +191,13 @@
         <!---Ejercicio 9--->
         <?php
             $fact = rand(1,15);
+            #Guardo el factorial original en otra variable
             $nfact = $fact;
 
+            #En este bucle, empiezo el contador con el numero factorial-1, y se detendra al llegar a 0,
+            #restara 1 por cada vez que se reinicie
             for ($i=$nfact-1; $i > 0; $i--) { 
+                #Se ira multiplicando y guardando el factorial
                 $nfact *= $i;
             }
             echo "<p>" . $fact . "! = " . $nfact . "</p>";
@@ -180,6 +208,8 @@
             $sumatorio = rand(1,20);
             $sum = 0;
 
+            #Creo un bucle parecido al del ejercicio anterior, solo que esta vez se va sumando el resultado
+            #en lugar de multiplicar
             for ($i=$sumatorio; $i > 0; $i--) { 
                 $sum += $i;
             }
@@ -213,7 +243,8 @@
 
             echo "<p> Impares menores que ".$nimpares." = ";
 
-            for ($i=0; $i < $nimpares; $i++) { 
+            for ($i=0; $i < $nimpares; $i++) {
+                #Si el contador es impar(al dividirlo entre 2, el resto no es 0), se imprimira el numero
                 if ($i%2!=0) {
                     echo $i." ";
                 }
@@ -228,24 +259,29 @@
         </form>
         <?php
             $ninvertir = $_GET["invertir"];
+            #Para invertir el numero he usado la funcion strrev(), la cual invierte numeros y strings de derecho al reves
             echo "<p> El numero invertido es ".strrev($ninvertir)." </p>";
         ?>
         <hr/>
         <!---Ejercicio 14--->
         <?php
+            #Creo un array con los notas generadas aleatoriamente
             $notas = array(rand(1,10), rand(1,10), rand(1,10), rand(1,10), rand(1,10), rand(1,10), rand(1,10), rand(1,10), rand(1,10), rand(1,10));
             $media = 0;
 
+            #Imprimo la notas de los alumnos y voy sumando las notas a la media
             for ($i=0; $i < 10; $i++) { 
                 echo "<p> Alumno ".($i+1)." - ".$notas[$i]." </p>";
                 $media += $notas[$i];
             }
 
+            #Una vez sumadas todas la notas, la dividimos entre 10 para obtener la media
             $media /= 10;
             echo "<p> La media de la clase es ".$media."</p>
                   <p> El/Los Alumnos que superan la media es/son ";
 
-            for ($i=0; $i < 10; $i++) { 
+            for ($i=0; $i < 10; $i++) {
+                #Si la nota del alumno es mayor que la media, se imprimira
                 if ($notas[$i]>$media) {
                     echo ($i+1)." ";
                 }
@@ -263,6 +299,7 @@
             $base = $_GET["base"];
             $exponente = $_GET["exponente"];
 
+            #Para calcular la potencia, utilizo la funcion pow()
             echo "<p> ".$base."^".$exponente." = ".pow($base,$exponente)."</p>";
         ?>
         <hr/>
@@ -270,16 +307,24 @@
         <?php
             function permutar($vector)
             {
+                #Creo una variable auxiliar para poder cambiar los valores del array
                 $aux = 0;
 
-                for ($i=0; $i < 7/2; $i++) { 
+                #Este bucle solo se recorrera la mitad del tamaño del array (3 veces en este caso)
+                for ($i=0; $i < 7/2; $i++) {
+                    #Gurado en la variable auxiliar el valor de atras
                     $aux = $vector[7-($i+1)];
+                    #Reemplazo esa posicion con el de delante
                     $vector[7-($i+1)] = $vector[$i];
+                    #Y reemplazo la posicion de delante con el valor de la variable auxiliar
                     $vector[$i] = $aux;
                 }
 
+                #Devuelvo el array permutado
                 return $vector;
             }
+
+            #Creo un array con los valores y lo imprimo
             $V = array(6,3,4,1,9,8,5);
             echo"<p>Array sin permutar: ";
             for ($i=0; $i < 7; $i++) { 
@@ -287,8 +332,10 @@
             }
             echo"</p>";
 
+            #Llamo a la funcion permutar() para obtener el array cambiado
             $V = permutar($V);
 
+            #Imprimo el array de nuevo, cuando ya esta modificado
             echo"<p>Array permutado: ";
             for ($i=0; $i < 7; $i++) { 
                 echo $V[$i]." ";
@@ -299,34 +346,43 @@
         <!---Ejercicio 17--->
         <?php
             function salarioMaximo($vector) {
+                #Inicializo la variable del maximo con la menor cantidad posible
                 $max=500;
                 foreach ($vector as $nombre => $salario) {
+                    #Si el salario es mayor que la cantidad en max, se guardara este como el nuevo maximo
                     if($salario>$max) {
                         $max = $salario;
                     }
                 }
+                #Devuelvo el valor del salario maximo
                 return $max;
             }
 
             function salarioMinimo($vector) {
+                #Inicializo la variable del minimo con la mayor cantidad posible
                 $min=1250;
                 foreach ($vector as $nombre => $salario) {
+                    #Si el salario es menor que la cantidad en min, se guardara este como el nuevo minimo
                     if($salario<$min) {
                         $min = $salario;
                     }
                 }
+                #Devuelvo el valor del salario minimo
                 return $min;
             }
 
             function salarioMedio($vector) {
                 $salarioMedio=0;
+                #Voy sumando todos los salarios
                 foreach ($vector as $nombre => $salario) {
                     $salarioMedio+=$salario;
                 }
+                #Y luego los divido entre 5
                 $salarioMedio/=5;
                 return $salarioMedio;
             }
 
+            #Creo un array asociativo con los trabajadores y sus salarios
             $trabajadores = array(
                     "Trabajador 1" => rand(550,1200),
                     "Trabajador 2" => rand(550,1200),
@@ -338,6 +394,7 @@
                 echo"<p> ".$nombre.": ".$salario."€ </p>";
             }
 
+            #Llamo a las funciones para calcular los datos
             echo"<p>El mayor salario es de ".salarioMaximo($trabajadores)."€ </p>";
             echo"<p>El menor salario es de ".salarioMinimo($trabajadores)."€ </p>";
             echo"<p>El salario medio es de ".salarioMedio($trabajadores)."€ </p>";
@@ -353,6 +410,7 @@
         <p><strong>Salarios con un aumento del 15%</strong></p>
         <?php
             foreach ($trabajadores as $nombre => $salario) {
+                #Guardo el resultado del porcentaje formateado con un solo decimal
                 $porcentaje=number_format($salario*15/100 ,1);
                 
                 echo"<p> ".$nombre.": ".($salario+$porcentaje)."€ </p>";
