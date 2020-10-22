@@ -127,5 +127,124 @@
             }
         ?>
         <hr/>
+        <!---Ejercicio 16 & 17-UD 2--->
+        <form>
+            <p>Inserta la cantidad en euros/pesetas:</p>
+            <input type="number" name="cantidad"/>
+            <p>A que moneda quieres convertir?</p>
+            <input type="radio" name="moneda" value="EUR"/>Euros
+            <input type="radio" name="moneda" value="PES"/>Pesetas
+            <input type="submit" value="Convertir"/>
+        </form>
+        <?php
+            $cantidad = $_REQUEST['cantidad'];
+            $moneda = $_REQUEST['moneda'];
+
+            #Dependiendo de la opcion seleccionada, se realizara el calculo correspondiente
+            if ($moneda=="EUR") {
+                #Divido la cantidad recibida, y luego guardo el resultado formateado (con solo 2 decimales)
+                $euros = sprintf("%.2f" , $cantidad / 166.386);
+                echo "<p> ".$cantidad." pesetas son ".$euros." € </p>";
+            } elseif ($moneda=="PES") {
+                #Divido la cantidad recibida, y luego guardo el resultado formateado (con solo 2 decimales)
+                $pesetas = sprintf("%.2f" , $cantidad * 166.386);
+                echo "<p> ".$cantidad." € son ".$pesetas." pesetas </p>";
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 1-UD 3--->
+        <form>
+            <p>Inserta un caracter : </p>
+            <input type="text" name="char" maxlength="1" />
+            <input type="submit" value="Comprobar"/>
+        </form>
+        <?php
+            $char = $_GET["char"];
+            #1. Comprobar si esta vacio (en blanco)
+            if($char=="" || ctype_space($char)) {
+                echo "<p> Esta vacio </p>";
+            } #2. Comprobar si es numerico
+            elseif (ctype_digit($char)) {
+                echo "<p> Es un numero </p>";
+            } #3. Comprobar si es una letra minuscula
+            elseif (ctype_lower($char)) {
+                echo "<p> Es una minuscula </p>";
+            } #4. Comprobar si es una letra mayuscula
+            elseif (ctype_upper($char)) {
+                echo "<p> Es una mayuscula </p>";
+            } #5. Comprobar si es un caracter de puntuacion
+            elseif (ctype_punct($char)) {
+                echo "<p> Es un caracter de puntuación </p>";
+            } #6. Si no es ninguna de los casos anteriores, sera un caracter especial
+            else {
+                echo "<p> Es un caracter especial </p>";
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 4-UD 3--->
+        <form>
+            <p>Inserta una hora (HH:MM:SS)</p>
+            <input type="text" name="hora"/>
+            <input type="submit" value="Validar"/>
+        </form>
+        <?php
+            $hora = $_REQUEST["hora"];
+            $time = DateTime::createFromFormat('H:i:s', $hora);
+
+            if($time && $time->format('H:i:s') == $hora) {
+                echo "<p>La hora es valida</p>";
+            } else { #En caso contrario, no sera valida
+                echo "<p>La hora no es valida</p>";
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 5-UD 3--->
+        <form>
+            <p> Inserta los minutos que ha durado cada llamada: </p>
+            <p><input type="number" name="duracion1"/>Llamada 1</p>
+            <p><input type="number" name="duracion2"/>Llamada 2</p>
+            <p><input type="number" name="duracion3"/>Llamada 3</p>
+            <p><input type="number" name="duracion4"/>Llamada 4</p>
+            <p><input type="number" name="duracion5"/>Llamada 5</p>
+            <input type="submit" value="Calcular precio total"/>
+        </form>
+        <?php
+            $duracion1 = $_REQUEST["duracion1"];
+            $duracion2 = $_REQUEST["duracion2"];
+            $duracion3 = $_REQUEST["duracion3"];
+            $duracion4 = $_REQUEST["duracion4"];
+            $duracion5 = $_REQUEST["duracion5"];
+            
+            $llamadas = array($duracion1, $duracion2, $duracion3, $duracion4, $duracion5);
+            $total = 0;
+
+            for ($i=0; $i < 5; $i++) {
+                #Si la llamada dura mas de 3 minutos...
+                if ($llamadas[$i] > 3) {
+                    #Con los minutos que sobran se multiplicaran por 5, añadiendo los 10 centimos que cuesta si o si la llamada
+                    $llamadas[$i] -= 3;
+                    $total += ($llamadas[$i]*5)+10;
+                } else { #En caso contrario, solo se sumaran 10 centimos
+                    $total += 10;
+                }
+            }
+            echo "<p>Todas las llamadas han costado ".$total." céntimos en total</p>";
+        ?>
+        <hr/>
+        <!---Ejercicio 7-UD 3--->
+        <hr/>
+        <!---Ejercicio 8-UD 3--->
+        <form>
+            <p><label>Numero: </label><input type="number" min="1" max="10" name="tabla"/></p>
+            <input type="submit" value="Sacar Tabla de multiplicar"/>
+        </form>
+        <?php
+            $ntabla=$_GET["tabla"];
+
+            for ($i=1; $i<11 ; $i++) { 
+                echo "<p> " . $ntabla . " * " . $i . " = " . ($ntabla*$i) . " </p>";
+            }
+        ?>
+        <hr/>
     </body>
 </html>
