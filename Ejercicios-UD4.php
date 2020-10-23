@@ -232,6 +232,27 @@
         ?>
         <hr/>
         <!---Ejercicio 7-UD 3--->
+        <form>
+            <p>Inserta una fecha (YYYY-MM-DD HH:mm:ss)</p>
+            <input type="text" name="fechaInicial"/>
+            <p>Inserta otra fecha (YYYY-MM-DD HH:mm:ss)</p>
+            <input type="text" name="fechaFinal"/>
+            <input type="submit" value="Calcular diferencia"/>
+        </form>
+        <?php
+            #Creo una fecha con date_create, le paso la cadena introducida en el formulario
+            $fechaInicial=date_create($_REQUEST["fechaInicial"]);
+            #Creo otra fecha a partir de la cadena introducida en el formulario
+            $fechaFinal=date_create($_REQUEST["fechaFinal"]);
+            #Obtengo la diferencia entre ambas fechas con la funcion date_diff()
+            $interval=date_diff($fechaInicial,$fechaFinal);
+
+            #$interval es un array asociativo donde se guardan todos los datos de la diferencia entre las fechas,
+            #'y' son los años, 'm' son los meses, 'd' son los dias, 'h' las horas y 'i' los minutos
+            $diferenciaDias = $interval->d + ($interval->m*30) + ($interval->y*365);
+            
+            echo "<p> Hay una diferencia de ".$diferenciaDias." dias ,".$interval->h." horas y ".$interval->i." minutos entre ambas fechas";
+        ?>
         <hr/>
         <!---Ejercicio 8-UD 3--->
         <form>
@@ -246,5 +267,108 @@
             }
         ?>
         <hr/>
+        <!---Ejercicio 17-UD 3--->
+        <?php
+            #Creo un array asociativo con los trabajadores y sus salarios
+            $trabajadores = array(
+                "Trabajador 1" => rand(550,1200),
+                "Trabajador 2" => rand(550,1200),
+                "Trabajador 3" => rand(550,1200),
+                "Trabajador 4" => rand(550,1200),
+                "Trabajador 5" => rand(550,1200)
+            );
+            foreach ($trabajadores as $nombre => $salario) {
+                echo"<p> ".$nombre.": ".$salario."€ </p>";
+            }
+        ?>
+        <form>
+            <p>Indica que valor/es quieres comprobar</p>
+            <p><input type="checkbox" name="salarios[]" value="MIN" checked/>Salario minimo</p>
+            <p><input type="checkbox" name="salarios[]" value="MAX"/>Salario maximo</p>
+            <p><input type="checkbox" name="salarios[]" value="Media"/>Salario medio</p>
+            <input type="submit" value="Comprobar"/>
+        </form>
+        <?php
+            $salarios = $_REQUEST['salarios'];
+
+            foreach ($salarios as $tipoSalario) {
+                switch ($tipoSalario) {
+                    case 'MIN':
+                        echo "<p> El salario minimo es de ".salarioMinimo($trabajadores)."€ </p>";
+                        break;
+                    case 'MAX':
+                        echo "<p> El salario maximo es de ".salarioMaximo($trabajadores)."€ </p>";
+                        break;
+                    case 'Media':
+                        echo "<p> El salario medio es de ".salarioMedio($trabajadores)."€ </p>";
+                        break;
+                    default:
+                        echo "<p> No has selecionado ninguna opcion </p>";
+                        break;
+                }
+            }
+
+            function salarioMaximo($vector) {
+                #Inicializo la variable del maximo con la menor cantidad posible
+                $max=500;
+                foreach ($vector as $nombre => $salario) {
+                    #Si el salario es mayor que la cantidad en max, se guardara este como el nuevo maximo
+                    if($salario>$max) {
+                        $max = $salario;
+                    }
+                }
+                #Devuelvo el valor del salario maximo
+                return $max;
+            }
+
+            function salarioMinimo($vector) {
+                #Inicializo la variable del minimo con la mayor cantidad posible
+                $min=1250;
+                foreach ($vector as $nombre => $salario) {
+                    #Si el salario es menor que la cantidad en min, se guardara este como el nuevo minimo
+                    if($salario<$min) {
+                        $min = $salario;
+                    }
+                }
+                #Devuelvo el valor del salario minimo
+                return $min;
+            }
+
+            function salarioMedio($vector) {
+                $salarioMedio=0;
+                #Voy sumando todos los salarios
+                foreach ($vector as $nombre => $salario) {
+                    $salarioMedio+=$salario;
+                }
+                #Y luego los divido entre 5
+                $salarioMedio/=5;
+                return $salarioMedio;
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 18--->
+        <p><strong>Salarios Actuales</strong></p>
+        <?php
+            foreach ($trabajadores as $nombre => $salario) {
+                echo"<p> ".$nombre.": ".$salario."€ </p>";
+            }
+        ?>
+        <p>Introduce un porcentaje: </p>
+        <form>
+            <input type="number" min="1" name="porcentaje"/>%
+            <input type="submit" value="Calcular"/>
+        </form>
+        <?php
+
+            $porcentaje = $_REQUEST['porcentaje'];
+            echo "<p><strong>Salarios aumentados en un ".$porcentaje."% </strong></p>";
+
+            foreach ($trabajadores as $nombre => $salario) {
+                #Guardo el resultado del porcentaje formateado con un solo decimal
+                $adicional=number_format($salario*$porcentaje/100 ,1);
+                
+                echo"<p> ".$nombre.": ".($salario+$adicional)."€ </p>";
+            }
+        ?>
     </body>
 </html>
