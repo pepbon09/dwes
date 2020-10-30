@@ -104,8 +104,116 @@
             } elseif (empty($obtener)) {
                 echo "<p> No has escogido ninguna opcion de la lista </p>";
             } else {
-                
+                foreach ($obtener as $opcion) {
+                    switch ($opcion) {
+                        case 'media':
+                            $res = 0;
+                            foreach ($lNumeros as $num) {
+                                $res += $num;
+                            }
+                            $res /= count($lNumeros);
+                            echo "<p> La media de los numeros es ".$res." </p>";
+                            break;
+                        case 'moda':
+                            $moda = 0;
+                            $vecesMax = 0;
+                            $cuenta = array_count_values($lNumeros);
+                            foreach ($cuenta as $numeros => $veces) {
+                                if($veces>$vecesMax){
+                                    $moda = $numeros;
+                                    $vecesMax = $veces;
+                                }
+                            }
+                            echo "<p> La moda de los numeros es ".$moda.", ha aparecido ".$vecesMax." vez/veces </p>";
+                            break;
+                        case 'mediana':
+                            $mediana = 0;
+                            if (count($lNumeros)%2==0) {
+                                $indiceMediana = count($lNumeros)/2;
+                                $num1 = $lNumeros[$indiceMediana];
+                                $num2 = $lNumeros[$indiceMediana-1];
+                                $mediana = ($num1+$num2)/2;
+                                echo "<p> La mediana de los numeros es ".$mediana.", promedio de los 2 numeros centrales (".$num1." y ".$num2.") </p>";
+                            } else {
+                                $indiceMediana = (count($lNumeros)-1)/2;
+                                $mediana = $lNumeros[$indiceMediana];
+                                echo "<p> La mediana de los numeros es ".$mediana." </p>";
+                            }
+                            break;
+                    }
+                }
             }
         ?>
+        <hr/>
+        <!---Ejercicio 4--->
+        <form>
+            <p>Escoge el curso al que perteneces</p>
+            <input type="radio" name="curso" value="1"/>Primero
+            <input type="radio" name="curso" value="2"/>Segundo
+            <p>Escoge los modulos que quieras listar</p>
+            <select multiple name="modulos[]">
+                <option value="DWEC">Desarrollo Web en Entorno Cliente</option>
+                <option value="DWES">Desarrollo Web en Entorno Servidor</option>
+                <option value="DAW">Despliegue de Apliciones Web</option>
+                <option value="DIW">Diseño de Interfaces Web</option>
+                <option value="EIE">Empresa e Iniciativa Emprendedora</option>
+                <option value="TUT">Tutoría</option>
+            </select>
+        </form>
+        <hr/>
+        <!---Ejercicio 5--->
+        <form>
+            <p>Introduce una hora (HH)</p>
+            <input type="text" name="hora"/>
+            <input type="submit" value="Generar mensaje"/>
+        </form>
+        <?php
+            $hora = $_REQUEST["hora"];
+            if (!ctype_digit($hora) || empty($hora) || $hora<0 || $hora>23) {
+                echo "<p> La hora que has introducido no es valida </p>";
+            } else {
+                if ($hora>=6 && $hora<=12) {
+                    echo "<p>Buenos días!</p>";
+                } elseif ($hora>=13 && $hora<=20) {
+                    echo "<p>Buenas tardes!</p>";
+                } else {
+                    echo "<p>Buenas noches!</p>";
+                }
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 6--->
+        <form>
+            <p>Selecciona una zona horaria </p>
+            <select multiple size="10" name="zonas[]">
+                <option value="UTC-11">UTC-11</option>
+                <option value="UTC-10">UTC-10</option>
+                <option value="UTC-9">UTC-9</option>
+                <option value="UTC-8">UTC-8</option>
+                <option value="UTC-7">UTC-7</option>
+                <option value="UTC-6">UTC-6</option>
+                <option value="UTC-5">UTC-5</option>
+                <option value="UTC-4">UTC-4</option>
+                <option value="UTC-3">UTC-3</option>
+                <option value="UTC-2">UTC-2</option>
+                <option value="UTC-1">UTC-1</option>
+                <option value="UTC+0">UTC+0</option>
+                <option value="UTC+1">UTC+1</option>
+                <option value="UTC+2">UTC+2</option>
+                <option value="UTC+3">UTC+3</option>
+                <option value="UTC+4">UTC+4</option>
+                <option value="UTC+5">UTC+5</option>
+                <option value="UTC+6">UTC+6</option>
+                <option value="UTC+7">UTC+7</option>
+                <option value="UTC+8">UTC+8</option>
+                <option value="UTC+9">UTC+9</option>
+                <option value="UTC+10">UTC+10</option>
+                <option value="UTC+11">UTC+11</option>
+                <option value="UTC+12">UTC+12</option>
+                <option value="UTC+13">UTC+13</option>
+                <option value="UTC+14">UTC+14</option>
+            </select>
+            <input type="submit" value="Mostrar horas"/>
+        </form>
     </body>
 </html>
