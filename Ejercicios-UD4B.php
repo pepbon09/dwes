@@ -186,34 +186,77 @@
         <form>
             <p>Selecciona una zona horaria </p>
             <select multiple size="10" name="zonas[]">
-                <option value="UTC-11">UTC-11</option>
-                <option value="UTC-10">UTC-10</option>
-                <option value="UTC-9">UTC-9</option>
-                <option value="UTC-8">UTC-8</option>
-                <option value="UTC-7">UTC-7</option>
-                <option value="UTC-6">UTC-6</option>
-                <option value="UTC-5">UTC-5</option>
-                <option value="UTC-4">UTC-4</option>
-                <option value="UTC-3">UTC-3</option>
-                <option value="UTC-2">UTC-2</option>
-                <option value="UTC-1">UTC-1</option>
-                <option value="UTC+0">UTC+0</option>
-                <option value="UTC+1">UTC+1</option>
-                <option value="UTC+2">UTC+2</option>
-                <option value="UTC+3">UTC+3</option>
-                <option value="UTC+4">UTC+4</option>
-                <option value="UTC+5">UTC+5</option>
-                <option value="UTC+6">UTC+6</option>
-                <option value="UTC+7">UTC+7</option>
-                <option value="UTC+8">UTC+8</option>
-                <option value="UTC+9">UTC+9</option>
-                <option value="UTC+10">UTC+10</option>
-                <option value="UTC+11">UTC+11</option>
-                <option value="UTC+12">UTC+12</option>
-                <option value="UTC+13">UTC+13</option>
-                <option value="UTC+14">UTC+14</option>
+                <option value="-11">UTC-11</option>
+                <option value="-10">UTC-10</option>
+                <option value="-9">UTC-9</option>
+                <option value="-8">UTC-8</option>
+                <option value="-7">UTC-7</option>
+                <option value="-6">UTC-6</option>
+                <option value="-5">UTC-5</option>
+                <option value="-4">UTC-4</option>
+                <option value="-3">UTC-3</option>
+                <option value="-2">UTC-2</option>
+                <option value="-1">UTC-1</option>
+                <option value="+0">UTC+0</option>
+                <option value="+1">UTC+1</option>
+                <option value="+2">UTC+2</option>
+                <option value="+3">UTC+3</option>
+                <option value="+4">UTC+4</option>
+                <option value="+5">UTC+5</option>
+                <option value="+6">UTC+6</option>
+                <option value="+7">UTC+7</option>
+                <option value="+8">UTC+8</option>
+                <option value="+9">UTC+9</option>
+                <option value="+10">UTC+10</option>
+                <option value="+11">UTC+11</option>
+                <option value="+12">UTC+12</option>
+                <option value="+13">UTC+13</option>
+                <option value="+14">UTC+14</option>
             </select>
-            <input type="submit" value="Mostrar horas"/>
+            <p>
+                <input type="submit" value="Mostrar horas"/>
+            </p>
         </form>
+        <?php
+            date_default_timezone_set('UTC');
+            $zonas = $_REQUEST["zonas"];
+            if (empty($zonas)) {
+                echo "<p> No has seleccionado ninguna opción </p>";
+            } elseif (count($zonas)>20) {
+                echo "<p> Has seleccionado demasiadas opciones (max. 20) </p>";
+            } else {
+                foreach ($zonas as $zona) {
+                    $aplicar = $zona." hours";
+                    $fecha = date('d/m H:i:s', strtotime($aplicar));
+                    echo "<p> Hora en UTC".$zona.": ".$fecha." </p>";
+                }   
+            }
+        ?>
+        <hr/>
+        <!---Ejercicio 7--->
+        <form>
+            <p>Introduce un correo electronico</p>
+            <input type="text" name="correo"/>
+            <p>Confirma el correo electronico</p>
+            <input type="text" name="correoconf"/>
+            <p><input type="checkbox" name="publicidad[]" value="acepta"/> Marca la casilla si aceptas recibir publicidad</p>
+            <input type="submit" value="Enviar"/>
+            <input type="reset" value="Borrar"/>
+        </form>
+        <?php
+            $correo = $_REQUEST["correo"];
+            $confirmacion = $_REQUEST["correoconf"];
+            $publicidad = $_REQUEST["publicidad"];
+
+            if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                echo "<p> La dirrecion de correo electronico que has introducido no es valida </p>";
+            } elseif ($correo != $confirmacion) {
+                echo "<p> La confirmacion y la direccion del correo electronico no coinciden </p>";
+            } elseif (empty($publicidad)) {
+                echo "<p> No has aceptado recibir publicidad </p>";
+            } else {
+                echo "<p> Correo enviado! </p>";
+            }
+        ?>
     </body>
 </html>
