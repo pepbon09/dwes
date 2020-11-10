@@ -17,29 +17,33 @@
             $nImpares = $_REQUEST["impares"];
             $operacion = $_REQUEST["operacion"];
 
+            #Validar que el campo nImpares no esta vacio, solo esta compuesto por digitos y no sea un numero negativo
             if ($nImpares=="" || !ctype_digit($nImpares) || $nImpares < 0) {
                 echo "<p> Cantidad no valida </p>";
-            } else {
-                $resultado = 1;
+            } else { #En caso de cumplir la validacion...
+                $resultado = 1; #Inicializo la variable del resultado (1 por defecto)
                 switch ($operacion) {
                     case 'suma':
+                        #Creo un bucle que se recorrera el numero introducido x 2, para asi poder recorrer todos los impares que ha pedido el usuario
                         for ($i=0; $i <= ($nImpares*2); $i++) { 
-                            if($i%2!=0){
-                                $resultado += $i;
+                            if($i%2!=0){ #Si el numero del contador es impar (es decir, al dividirlo entre 2 su resto no es 0)
+                                $resultado += $i; #Sumo al resultado final el numero del contador
                             }
                         }
-                        --$resultado;
+                        --$resultado; #En este caso, le restaremos uno al resultado para cuadrarlo
                         echo "<p>La suma de los primeros ".$nImpares." numeros impares es: ".$resultado."</p>";
                         break;
                     case 'multi':
+                        #Creo un bucle que se recorrera el numero introducido x 2, para asi poder recorrer todos los impares que ha pedido el usuario
                         for ($i=0; $i <= ($nImpares*2); $i++) { 
-                            if($i%2!=0){
-                                $resultado *= $i;
+                            if($i%2!=0){ #Si el numero del contador es impar (es decir, al dividirlo entre 2 su resto no es 0)
+                                $resultado *= $i; #Multiplico el resultado por el numero del contador
                             }
                         }
                         echo "<p>La multiplicación de los primeros ".$nImpares." numeros impares es: ".$resultado."</p>";
                         break;
                     default:
+                        #Devolvera este error en caso de no haber seleccionado ninguna operacion
                         echo "<p>No has seleccionado ninguna operación</p>";
                         break;
                 }
@@ -60,10 +64,11 @@
             $nombre = $_REQUEST["nombre"];
             $mensaje = $_REQUEST["mensaje"];
             
+            #Validar que el campo nombre no esta vacio y solo esta compuesto por letras
             if($nombre=="" || !ctype_alpha($nombre)) {
                 echo "<p>Nombre no valido</p>";
             } else {
-                switch ($mensaje) {
+                switch ($mensaje) { #Dependiendo de la opcion que haya escogido, se mostrara el mensaje correspondiente
                     case 'bienvenida':
                         echo "<p>Bienvenid@ a nuestra pagina web ".$nombre."! </p>";
                         break;
@@ -71,6 +76,7 @@
                         echo "<p>Hasta luego ".$nombre.", esperamos que vuelvas pronto! </p>";
                         break;
                     default:
+                        #Devolvera este error en caso de no haber seleccionado ninguna operacion
                         echo "<p>No has escogido el tipo de mensaje</p>";
                         break;
                 }
@@ -91,17 +97,18 @@
             $numeros = $_REQUEST["numeros"];
             $obtener = $_REQUEST["obtener"];
 
+            #Dividire el string donde se han introducido los numeros y los guardo en un array
             $lNumeros = explode(" ", $numeros);
             $listaValida = true;
-            foreach ($lNumeros as $num) {
+            foreach ($lNumeros as $num) { #Ahora comprobare que todos los componentes del array son numeros
                 if(!ctype_digit($num)) {
-                    $listaValida = false;
+                    $listaValida = false; #En el caso de encontrar algun elemento que no sea un numero, la lista se dara como no valida
                 }
             }
 
-            if (!$listaValida) {
+            if (!$listaValida) { #Si se ha detectado que no es una lista valida, sacara el siguiente error
                 echo "<p> La lista de numeros que has introducido no es valida </p>";
-            } elseif (empty($obtener)) {
+            } elseif (empty($obtener)) { #Validar que no este vacia la lista de las operaciones
                 echo "<p> No has escogido ninguna opcion de la lista </p>";
             } else {
                 foreach ($obtener as $opcion) {
@@ -151,7 +158,7 @@
             <input type="radio" name="curso" value="1"/>Primero
             <input type="radio" name="curso" value="2"/>Segundo
             <p>Escoge los modulos que quieras listar</p>
-            <select multiple name="modulos[]">
+            <select multiple size="6" name="modulos[]">
                 <option value="DWEC">Desarrollo Web en Entorno Cliente</option>
                 <option value="DWES">Desarrollo Web en Entorno Servidor</option>
                 <option value="DAW">Despliegue de Apliciones Web</option>
@@ -159,7 +166,56 @@
                 <option value="EIE">Empresa e Iniciativa Emprendedora</option>
                 <option value="TUT">Tutoría</option>
             </select>
+            <p>Escribe la hora a la que empieza cada clase (HH:MM, en el orden de la lista de arriba y separadas por espacios)</p>
+            <input type="text" name="horas"/>
+            <input type="submit" value="Crear horario"/>
         </form>
+        <?php
+            $curso = $_REQUEST["curso"];
+            $modulos = $_REQUEST["modulos"];
+            $horas = $_REQUEST["horas"];
+            $lista = explode(' ', $horas);
+
+            if ($curso=="") {
+                echo "<p>No has especificado ningun curso</p>";
+            } elseif (empty($modulos)) {
+                echo "<p>No has seleccionado ningun modulo</p>";
+            } elseif ($horas==""||!listaValida($horas, $modulos)) {
+                echo "<p>No has introducido las horas correctamente</p>";
+            } else {
+                echo "<table style='border: 1px solid;margin: 15px;text-align: center;'>
+                            <th colspan='2' style='border: 1px solid;'>".$curso."º DAW </th>";
+                for ($i=0; $i < count($modulos); $i++) {                     
+                    echo "<tr>
+                            <td style='border: 1px solid;'>".$lista[$i]."</td>
+                            <td>".$modulos[$i]."</td>
+                          </tr>";
+                }
+                echo "</table>";
+            }
+
+
+            function listaValida($lista, $modulos) {
+                $valida = true;
+                $listaHoras = explode(' ', $lista);
+                if (count($listaHoras)!=count($modulos)) {
+                    $valida = false;
+                } else {
+                    foreach ($listaHoras as $h) {
+                        $componentesHora = explode(':', $h);
+                        if (count($componentesHora)!=2 || 
+                            $componentesHora[0]<0 ||
+                            $componentesHora[0]>23 ||
+                            $componentesHora[1]<0 ||
+                            $componentesHora[1]>59) {
+                            
+                                $valida = false;
+                        }
+                    }
+                }
+                return $valida;
+            }
+        ?>
         <hr/>
         <!---Ejercicio 5--->
         <form>
@@ -258,5 +314,66 @@
                 echo "<p> Correo enviado! </p>";
             }
         ?>
+        <hr/>
+        <!---Ejercicio 8--->
+        <form action="resultadosEj8.php" method="POST">
+            <p>Nombre:</p>
+            <input type="text" name="nombre8"/>
+            <p>Apellidos:</p>
+            <input type="text" name="apellidos8"/>
+            <p>Edad: </p>
+            <input type="text" name="edad8"/>
+            <p>Peso (en Kg.): </p>
+            <input type="text" name="peso8"/>
+            <p>Sexo: </p>
+            <input type="radio" name="sexo8" value="hombre"/>Hombre
+            <input type="radio" name="sexo8" value="mujer"/>Mujer
+            <p>Estado civil </p>
+            <input type="radio" name="estadocivil8" value="Soltero"/>Soltero
+            <input type="radio" name="estadocivil8" value="Casado"/>Casado
+            <input type="radio" name="estadocivil8" value="Viudo"/>Viudo
+            <input type="radio" name="estadocivil8" value="Divorciado"/>Divorciado
+            <input type="radio" name="estadocivil8" value="Otro"/>Otro
+            <p>Aficiones: </p>
+            <input type="checkbox" name="aficiones8[]" value="Cine"/> Cine
+            <input type="checkbox" name="aficiones8[]" value="Deporte"/> Deporte
+            <input type="checkbox" name="aficiones8[]" value="Literatura"/> Literatura
+            <input type="checkbox" name="aficiones8[]" value="Musica"/> Musica
+            <input type="checkbox" name="aficiones8[]" value="Comics"/> Comics
+            <input type="checkbox" name="aficiones8[]" value="Series"/> Series
+            <input type="checkbox" name="aficiones8[]" value="Videojuegos"/> Videojuegos
+            <p>
+                <input type="submit" value="Enviar"/>
+                <input type="reset" value="Borrar"/>
+            </p>
+        </form>
+        <hr/>
+        <!---Ejercicio 9--->
+        <form action="resultadosEj9.php" method="POST" enctype="multipart/form-data">
+            <p>Nombre completo:</p>
+            <input type="text" name="nombre9"/>
+            <p>Contraseña: </p>
+            <input type="password" name="contra9"/>
+            <p>Nivel de estudios:</p>
+            <input type="radio" name="estudios9" value="Sin Estudios"/>Sin Estudios
+            <input type="radio" name="estudios9" value="ESO"/>Educación Secundaria Obligatoria
+            <input type="radio" name="estudios9" value="BACH"/>Bachillerato
+            <input type="radio" name="estudios9" value="FP"/>Formación Profesional
+            <input type="radio" name="estudios9" value="UNI"/>Estudios Universitarios
+            <p>Nacionalidad:</p>
+            <input type="radio" name="nacionalidad9" value="ESP"/> Española
+            <input type="radio" name="nacionalidad9" value="Otro"/> Otra
+            <p>Idiomas: </p>
+            <input type="checkbox" name="idiomas9[]" value="ESP"/> Español
+            <input type="checkbox" name="idiomas9[]" value="ENG"/> Ingles
+            <input type="checkbox" name="idiomas9[]" value="ALE"/> Aleman
+            <input type="checkbox" name="idiomas9[]" value="ITA"/> Italiano
+            <input type="checkbox" name="idiomas9[]" value="FRA"/> Frances
+            <p>Email: </p>
+            <input type="text" name="email9"/>
+            <p>Adjuntar Foto: </p>
+            <input type="file" name="foto9"/>
+            <p><input type="submit" value="Enviar"/></p>
+        </form>
     </body>
 </html>
