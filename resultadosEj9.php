@@ -32,10 +32,13 @@
                     echo "<p>ERROR: No has subido ninguna foto </p>";
                 } else { #7.2 Comprobar que el fichero tiene extension PNG,JPG o GIF
                     $extension = explode('.', $foto["name"]);
-                    if(!($extension[1]=="png"||$extension[1]=="jpg"||$extension[1]=="gif")) {
+                    $indiceExt = count($extension)-1;
+                    if(!($extension[$indiceExt]=="png"||$extension[$indiceExt]=="jpg"||$extension[$indiceExt]=="gif")) {
                         echo "<p>ERROR: El fichero que has subido no es una imagen </p>";
                     } elseif (!is_dir("img/")) { #7.3 Comprobar que existe un directorio para guardar la imagen
                         echo "<p>ERROR: No existe ningun directorio para guardar la imagen </p>";
+                    } elseif ($foto["size"]>6250) { #7.4 Comprobar que la imagen no supere el tamaño de 50 Kb
+                        echo "<p>ERROR: La imagen que has subido ocupa demasiado (Max. 50 Kb) </p>";
                     } else { #Si cumple con todo lo anterior se generara un nombre unico y se movera al directorio del servidor
                         $idUnico = time();
                         $nombreImagen = $idUnico."-".$foto['name'];

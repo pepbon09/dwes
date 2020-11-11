@@ -114,34 +114,41 @@
                 foreach ($obtener as $opcion) {
                     switch ($opcion) {
                         case 'media':
-                            $res = 0;
+                            $res = 0; #Creo una variable donde guardare el resultado
                             foreach ($lNumeros as $num) {
-                                $res += $num;
+                                $res += $num; #Sumare todos los numeros de la lista
                             }
-                            $res /= count($lNumeros);
+                            $res /= count($lNumeros); #Y luego lo dividire entre la cantidad de numeros que se han introducido
                             echo "<p> La media de los numeros es ".$res." </p>";
                             break;
                         case 'moda':
                             $moda = 0;
-                            $vecesMax = 0;
+                            $vecesMax = 0; #Creo dos variables, una para guardar el numero moda y otra para guardar las veces que ha salido
                             $cuenta = array_count_values($lNumeros);
-                            foreach ($cuenta as $numeros => $veces) {
-                                if($veces>$vecesMax){
-                                    $moda = $numeros;
-                                    $vecesMax = $veces;
+                            /*
+                            La variable $cuenta es un array asociativo que guarda como key los valores dentro del array $lNumeros,
+                            y como valor sera las veces que aparece dicha key en el array $lNumeros
+                            EJEMPLO: si $lNumeros = [7,3,3,5], entonces $cuenta = ["7"=>1,"3"=>2,"5"=>1]
+                            */
+                            foreach ($cuenta as $numeros => $veces) { #Creo un bucle que recorrera el array asociativo
+                                if($veces>$vecesMax){ #Si el valor de la key actual es mayor que el maximo que se ha registrado
+                                    $moda = $numeros; #Entonces tendremos una nueva moda, guardamos la key como numero moda
+                                    $vecesMax = $veces; #Y el valor como las veces que ha salido
                                 }
                             }
                             echo "<p> La moda de los numeros es ".$moda.", ha aparecido ".$vecesMax." vez/veces </p>";
                             break;
                         case 'mediana':
                             $mediana = 0;
-                            if (count($lNumeros)%2==0) {
+                            if (count($lNumeros)%2==0) { #Si se ha introducido una cantidad de numeros par
+                                #Obtendremos los 2 numeros de la mitad y haremos la media de los 2
                                 $indiceMediana = count($lNumeros)/2;
                                 $num1 = $lNumeros[$indiceMediana];
                                 $num2 = $lNumeros[$indiceMediana-1];
                                 $mediana = ($num1+$num2)/2;
                                 echo "<p> La mediana de los numeros es ".$mediana.", promedio de los 2 numeros centrales (".$num1." y ".$num2.") </p>";
-                            } else {
+                            } else { #Si se ha introducido una cantidad de numeros impar
+                                #Solo accederemos al indice de la mitad del array
                                 $indiceMediana = (count($lNumeros)-1)/2;
                                 $mediana = $lNumeros[$indiceMediana];
                                 echo "<p> La mediana de los numeros es ".$mediana." </p>";
@@ -176,16 +183,16 @@
             $horas = $_REQUEST["horas"];
             $lista = explode(' ', $horas);
 
-            if ($curso=="") {
+            if ($curso=="") { #Validar que el campo curso no este vacio
                 echo "<p>No has especificado ningun curso</p>";
-            } elseif (empty($modulos)) {
+            } elseif (empty($modulos)) { #Validar que el campo modulos no este vacio
                 echo "<p>No has seleccionado ningun modulo</p>";
-            } elseif ($horas==""||!listaValida($horas, $modulos)) {
+            } elseif ($horas==""||!listaValida($horas, $modulos)) { #Validar que el campo horas no este vacio, que son horas validas e introducidas en el formato adecuado (funcion listaValida)
                 echo "<p>No has introducido las horas correctamente</p>";
-            } else {
-                echo "<table style='border: 1px solid;margin: 15px;text-align: center;'>
-                            <th colspan='2' style='border: 1px solid;'>".$curso."º DAW </th>";
-                for ($i=0; $i < count($modulos); $i++) {                     
+            } else { #En caso de cumplir la validación...
+                echo "<table style='border: 1px solid;margin: 15px;text-align: center;'> 
+                            <th colspan='2' style='border: 1px solid;'>".$curso."º DAW </th>"; #Creamos la tabla y el encabezado con el curso seleccionado
+                for ($i=0; $i < count($modulos); $i++) { #Se creara una fila por cada modulo seleccionado, contendra en la primera columna la hora a la que empieza la clase y en la segunda el modulo correspondiente                
                     echo "<tr>
                             <td style='border: 1px solid;'>".$lista[$i]."</td>
                             <td>".$modulos[$i]."</td>
@@ -195,24 +202,29 @@
             }
 
 
+            #Esta funcion comprobara que se han introducido horas validas y en el formato correcto
             function listaValida($lista, $modulos) {
-                $valida = true;
-                $listaHoras = explode(' ', $lista);
+                $valida = true; #Daremos la condicion de que la lista es valida desde el principio
+                $listaHoras = explode(' ', $lista); #Creamos un array que contendra cada hora separadas por espacios
                 if (count($listaHoras)!=count($modulos)) {
+                    #Si no tenemos la misma cantidad de horas que modulos seleccionados, entonces esta lista ya no nos vale
                     $valida = false;
                 } else {
-                    foreach ($listaHoras as $h) {
-                        $componentesHora = explode(':', $h);
-                        if (count($componentesHora)!=2 || 
+                    foreach ($listaHoras as $h) { #Ahora que sabemos que tenemos el mismo numero de horas y de modulos, vamos a comprobar que son horas validas
+                        $componentesHora = explode(':', $h); #Partimos el valor en dos a partir de ':', separando asi las horas y los minutos en el array $componentesHora
+                        if (count($componentesHora)!=2 || #En el caso de tener mas de 2 componentes...
+                            !ctype_digit($componentesHora[0]) ||
+                            !ctype_digit($componentesHora[1]) || #Que las horas o los minutos no esten compuestos solo por numeros...
                             $componentesHora[0]<0 ||
-                            $componentesHora[0]>23 ||
+                            $componentesHora[0]>23 || #Que las horas no se encuentren entre 0 y 23
                             $componentesHora[1]<0 ||
-                            $componentesHora[1]>59) {
-                            
+                            $componentesHora[1]>59) { #Y que los minutos no se encuentren entre 0 y 59
+                                #Si se da cualquiera de esos casos, se dara la hora introducida como invalida, y por lo tanto la lista entera
                                 $valida = false;
                         }
                     }
                 }
+                #Devolveremos el valor booleano correspondiente, si ha cumplido todas las validaciones, devolvera true, en caso contrario, false
                 return $valida;
             }
         ?>
@@ -225,9 +237,11 @@
         </form>
         <?php
             $hora = $_REQUEST["hora"];
-            if (!ctype_digit($hora) || empty($hora) || $hora<0 || $hora>23) {
+            #Validar que el campo hora no este vacio, que solo este compuesto por numeros y que se encuentre dentro de 0 y 23
+            if (!ctype_digit($hora) || $hora=="" || $hora<0 || $hora>23) {
                 echo "<p> La hora que has introducido no es valida </p>";
-            } else {
+            } else { #En caso de cumplir la validacion...
+                #Sacara el mensaje correspondiente dependiendo del rango en el que se encuentre la hora
                 if ($hora>=6 && $hora<=12) {
                     echo "<p>Buenos días!</p>";
                 } elseif ($hora>=13 && $hora<=20) {
@@ -274,14 +288,20 @@
             </p>
         </form>
         <?php
-            date_default_timezone_set('UTC');
+            date_default_timezone_set('UTC'); #Establecemos la zona horaria por defecto en UTC
             $zonas = $_REQUEST["zonas"];
-            if (empty($zonas)) {
+            if (empty($zonas)) { #Validamos que el campo zonas no esta vacio
                 echo "<p> No has seleccionado ninguna opción </p>";
-            } elseif (count($zonas)>20) {
+            } elseif (count($zonas)>20) { #Y que no ha seleccionado mas de 20 opciones
                 echo "<p> Has seleccionado demasiadas opciones (max. 20) </p>";
             } else {
                 foreach ($zonas as $zona) {
+                    /*
+                    Calcularemos dependiendo de la opcion que hemos escogido, las horas que vamos a añadir o quitar
+                    EJEMPLO: Si hemos seleccionado la opcion +3, $aplicar = "+3 hours"
+                    Esto nos servira a la hora de formatear la fecha, ya que podremos modificarla gracias a la funcion strtotime
+                    EJEMPLO: Si en PHP la fecha actual es 15:15, date("H:i", strtotime("+3 hours")) = 18:15
+                     */
                     $aplicar = $zona." hours";
                     $fecha = date('d/m H:i:s', strtotime($aplicar));
                     echo "<p> Hora en UTC".$zona.": ".$fecha." </p>";
@@ -304,13 +324,14 @@
             $confirmacion = $_REQUEST["correoconf"];
             $publicidad = $_REQUEST["publicidad"];
 
+            #Validar que el campo correo cumple con la validacion por defecto de PHP
             if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
                 echo "<p> La dirrecion de correo electronico que has introducido no es valida </p>";
-            } elseif ($correo != $confirmacion) {
+            } elseif ($correo != $confirmacion) { #Validar que el campo correo y el campo confirmacion contienen el mismo texto
                 echo "<p> La confirmacion y la direccion del correo electronico no coinciden </p>";
-            } elseif (empty($publicidad)) {
+            } elseif (empty($publicidad)) { #Validar que el campo publicidad no este vacio
                 echo "<p> No has aceptado recibir publicidad </p>";
-            } else {
+            } else { #En el caso de cumplir todas las validaciones, mostraremos al usuario que se ha enviado el correo correctamente
                 echo "<p> Correo enviado! </p>";
             }
         ?>
