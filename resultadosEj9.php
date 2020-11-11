@@ -37,7 +37,7 @@
                         echo "<p>ERROR: El fichero que has subido no es una imagen </p>";
                     } elseif (!is_dir("img/")) { #7.3 Comprobar que existe un directorio para guardar la imagen
                         echo "<p>ERROR: No existe ningun directorio para guardar la imagen </p>";
-                    } elseif ($foto["size"]>6250) { #7.4 Comprobar que la imagen no supere el tamaño de 50 Kb
+                    } elseif ($foto["size"]>50000) { #7.4 Comprobar que la imagen no supere el tamaño de 50 Kb
                         echo "<p>ERROR: La imagen que has subido ocupa demasiado (Max. 50 Kb) </p>";
                     } else { #Si cumple con todo lo anterior se generara un nombre unico y se movera al directorio del servidor
                         $idUnico = time();
@@ -46,8 +46,7 @@
                         move_uploaded_file($foto["tmp_name"], $completo);
 
                         #Indicaremos al usuario que se ha procesado el formulario con exito
-                        echo "<h1> Formulario procesado con exito! </h1>";
-                        echo "<h3> Pagina hecha por Josep Bonafont - 2º DAW Grupo B </h3>";
+                        header('Location: resultadosEj9.html');
                     }
                 }
             }
