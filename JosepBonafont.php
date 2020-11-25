@@ -4,24 +4,24 @@
         <title>Formulario Biblioteca</title>
     </head>
     <body>
-        <form action="JosepBonafont_ok.php" method="POST">
+        <form action="JosepBonafont.php" method="POST">
             <h1>Registrate</h1>
             <p>Nombre de usuario: </p>
-            <input type="text" name="usuario"/>
+            <input type="text" name="usuario" value="<?php echo $_REQUEST["usuario"]?>"/>
             <p>Contraseña: </p>
-            <input type="password" name="contra"/>
+            <input type="password" name="contra" value="<?php echo $_REQUEST["contra"]?>"/>
             <p>Nombre: </p>
-            <input type="text" name="nombre"/>
+            <input type="text" name="nombre" value="<?php echo $_REQUEST["nombre"]?>"/>
             <p>Email: </p>
-            <input type="text" name="email"/>
+            <input type="text" name="email" value="<?php echo $_REQUEST["email"]?>"/>
             <p>Tlf. Fijo </p>
-            <input type="text" name="tlfFijo"/>
+            <input type="text" name="tlfFijo" value="<?php echo $_REQUEST["tlfFijo"]?>"/>
             <p>Tlf. Móvil </p>
-            <input type="text" name="tlfMovil"/>
+            <input type="text" name="tlfMovil" value="<?php echo $_REQUEST["tlfMovil"]?>"/>
             <p>Dirección</p>
-            <input type="text" name="direccion"/>
+            <input type="text" name="direccion" value="<?php echo $_REQUEST["direccion"]?>"/>
             <p>C.P.</p>
-            <input type="text" name="cpostal"/>
+            <input type="text" name="cpostal" value="<?php echo $_REQUEST["cpostal"]?>"/>
             <p>Sexo</p>
             <input type="radio" name="sexo" value="Hombre"/>Hombre
             <input type="radio" name="sexo" value="Mujer"/>Mujer
@@ -32,7 +32,7 @@
             <input type="checkbox" name="conocido[]" value="Conocidos"/> Conocidos
             <input type="checkbox" name="conocido[]" value="Otro"/> Otro
             <p>¿Que temas te interesan mas?</p>
-            <select multiple name="temas[]">
+            <select multiple size="5" name="temas[]">
                 <option value="Historica">Histórica</option>
                 <option value="Misterio">Misterio</option>
                 <option value="Romantica">Romántica</option>
@@ -48,54 +48,80 @@
                 <option value="Adulto(+18)">Adulto(+18 años)</option>
             </select>
             <p>
-                <input type="submit" value="Enviar"/>
+                <input type="submit" value="Validar" name="validar"/>
                 <input type="reset" value="Limpiar"/>
-                <button type="button" onclick="validarFormulario()">Comprobar datos</button>
+                <input type="submit" value="Enviar" name="enviar"/>
             </p>
         </form>
         <?php
             include 'JosepBonafont_v.php';
 
-            function validarFormulario() {
-                if(usuarioValido($_REQUEST["usuario"])!="Valido") {
-                    echo usuarioValido($_REQUEST["usuario"]);
+            $usuario = isset($_REQUEST["usuario"]) ? $_REQUEST["usuario"] : null;
+            $contra = isset($_REQUEST["contra"]) ? $_REQUEST["contra"] : null;
+            $nombre = isset($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : null;
+            $email = isset($_REQUEST["email"]) ? $_REQUEST["email"] : null;
+            $tlfFijo = isset($_REQUEST["tlfFijo"]) ? $_REQUEST["tlfFijo"] : null;
+            $tlfMovil = isset($_REQUEST["tlfMovil"]) ? $_REQUEST["tlfMovil"] : null;
+            $direccion = isset($_REQUEST["direccion"]) ? $_REQUEST["direccion"] : null;
+            $cp = isset($_REQUEST["cpostal"]) ? $_REQUEST["cpostal"] : null;
+            $sexo = isset($_REQUEST["sexo"]) ? $_REQUEST["sexo"] : null;
+            $acepta = isset($_REQUEST["acepta"]) ? $_REQUEST["acepta"] : null;
+            $conocido = isset($_REQUEST["conocido"]) ? $_REQUEST["conocido"] : null;
+            $temas = isset($_REQUEST["temas"]) ? $_REQUEST["temas"] : null;
+            $tipo = isset($_REQUEST["tipo"]) ? $_REQUEST["tipo"] : null;
+            $btnEnviar = $_REQUEST["enviar"];
+
+            $errores = array();
+
+            if(usuarioValido($usuario)!="Valido") {
+                $errores[] = usuarioValido($usuario);
+            }
+            if(contraValido($contra)!="Valido") {
+                $errores[] = contraValido($contra);
+            }
+            if(nombreValido($nombre)!="Valido") {
+                $errores[] = nombreValido($nombre);
+            }
+            if(correoValido($email)!="Valido") {
+                $errores[] = correoValido($email);
+            }
+            if(fijoValido($tlfFijo)!="Valido") {                   
+                $errores[] = fijoValido($tlfFijo);
+            }
+            if(movilValido($tlfMovil)!="Valido") {
+                $errores[] = movilValido($tlfMovil);
+            }
+            if(direccionValido($direccion)!="Valido") {
+                $errores[] = direccionValido($direccion);
+            }
+            if(cpValido($cp)!="Valido") {
+                $errores[] = cpValido($cp);
+            }
+            if(sexoValido($sexo)!="Valido") {
+                $errores[] = sexoValido($sexo);
+            }
+            if(aceptaValido($acepta)!="Valido") {
+                $errores[] = aceptaValido($acepta);
+            }
+            if(conocidoValido($conocido)!="Valido") {
+                $errores[] = conocidoValido($conocido);
+            }
+            if(temasValido($temas)!="Valido") {
+                $errores[] = temasValido($temas);
+            }
+            if(tipoValido($tipo)!="Valido") {
+                $errores[] = tipoValido($tipo);
+            }
+
+            if(empty($errores) && isset($btnEnviar)==1) {
+                header('location: JosepBonafont_ok.php?usuario='.$usuario.'&nombre='.$nombre.'&email='.$email.'&tlfFijo='.$tlfFijo.'&tlfMovil='.$tlfMovil.'&direccion='.$direccion.'&cpostal='.$cp.'&sexo='.$sexo.'&tipo='.$tipo);
+                exit;
+            } else {
+                echo "<ul style='color: #f00;'>";
+                foreach ($errores as $error) {
+                    echo "<li>".$error."</li>";
                 }
-                elseif(contraValido($_REQUEST["contra"])!="Valido") {
-                    echo contraValido($_REQUEST["contra"]);
-                }
-                elseif(nombreValido($_REQUEST["nombre"])!="Valido") {
-                    echo nombreValido($_REQUEST["nombre"]);
-                }
-                elseif(correoValido($_REQUEST["correo"])!="Valido") {
-                    echo correoValido($_REQUEST["correo"]);
-                }
-                elseif(fijoValido($_REQUEST["tlfFijo"])!="Valido") {
-                    echo fijoValido($_REQUEST["tlfFijo"]);
-                }
-                elseif(movilValido($_REQUEST["tlfMovil"])!="Valido") {
-                    echo movilValido($_REQUEST["tlfMovil"]);
-                }
-                elseif(direccionValido($_REQUEST["direccion"])!="Valido") {
-                    echo direccionValido($_REQUEST["direccion"]);
-                }
-                elseif(cpValido($_REQUEST["cpostal"])!="Valido") {
-                    echo cpValido($_REQUEST["cpostal"]);
-                }
-                elseif(sexoValido($_REQUEST["sexo"])!="Valido") {
-                    echo sexoValido($_REQUEST["sexo"]);
-                }
-                elseif(aceptaValido($_REQUEST["acepta"])!="Valido") {
-                    echo aceptaValido($_REQUEST["acepta"]);
-                }
-                elseif(conocidoValido($_REQUEST["conocido"])!="Valido") {
-                    echo conocidoValido($_REQUEST["conocido"]);
-                }
-                elseif(temasValido($_REQUEST["temas"])!="Valido") {
-                    echo temasValido($_REQUEST["temas"]);
-                }
-                elseif(tipoValido($_REQUEST["tipo"])!="Valido") {
-                    echo tipoValido($_REQUEST["tipo"]);
-                }
+                echo "</ul>";
             }
 
         ?>

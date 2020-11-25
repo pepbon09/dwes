@@ -10,7 +10,6 @@
         <?php
 
             $usuario = $_REQUEST["usuario"];
-            $contra = $_REQUEST["contra"];
             $nombre = $_REQUEST["nombre"];
             $email = $_REQUEST["email"];
             $tlfFijo = $_REQUEST["tlfFijo"];
@@ -18,9 +17,6 @@
             $direccion = $_REQUEST["direccion"];
             $cp = $_REQUEST["cpostal"];
             $sexo = $_REQUEST["sexo"];
-            $acepta = $_REQUEST["acepta"];
-            $conocido = $_REQUEST["conocido"];
-            $temas = $_REQUEST["temas"];
             $tipo = $_REQUEST["tipo"];
 
             echo "<p>Usuario: <strong>".strtoupper($usuario)."</strong></p>";
