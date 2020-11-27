@@ -27,18 +27,18 @@
             <input type="radio" name="sexo" value="Mujer"/>Mujer
             <p>Marca la casilla si aceptas nuestro LOPDGDD <input type="checkbox" name="acepta[]" value="si"/></p>
             <p>¿Como nos has conocido?</p>
-            <input type="checkbox" name="conocido[]" value="Web"/> Web
-            <input type="checkbox" name="conocido[]" value="Prensa"/> Prensa
-            <input type="checkbox" name="conocido[]" value="Conocidos"/> Conocidos
-            <input type="checkbox" name="conocido[]" value="Otro"/> Otro
-            <p>¿Que temas te interesan mas?</p>
-            <select multiple size="5" name="temas[]">
-                <option value="Historica">Histórica</option>
-                <option value="Misterio">Misterio</option>
-                <option value="Romantica">Romántica</option>
-                <option value="Terror">Terror</option>
-                <option value="Comic">Comic</option>
+            <select multiple size="4" name="conocido[]">
+                <option value="Web">Web</option>
+                <option value="Prensa">Prensa</option>
+                <option value="Conocidos">Conocidos</option>
+                <option value="Otro">Otro</option>
             </select>
+            <p>¿Que temas te interesan mas?</p>
+            <input type="checkbox" name="temas[]" value="Historica"/> Histórica
+            <input type="checkbox" name="temas[]" value="Misterio"/> Misterio
+            <input type="checkbox" name="temas[]" value="Romantica"/> Romántica
+            <input type="checkbox" name="temas[]" value="Terror"/> Terror
+            <input type="checkbox" name="temas[]" value="Comic"/> Comic
             <p>¿Que tipo de usuario eres?</p>
             <select name="tipo">
                 <option value="Infantil(1-5)">Infantil(1-5 años)</option>
@@ -114,7 +114,25 @@
             }
 
             if(empty($errores) && isset($btnEnviar)==1) {
-                header('location: JosepBonafont_ok.php?usuario='.$usuario.'&nombre='.$nombre.'&email='.$email.'&tlfFijo='.$tlfFijo.'&tlfMovil='.$tlfMovil.'&direccion='.$direccion.'&cpostal='.$cp.'&sexo='.$sexo.'&tipo='.$tipo);
+
+                $url =  'location: JosepBonafont_ok.php?usuario='.$usuario.
+                        '&nombre='.$nombre.
+                        '&email='.$email.
+                        '&tlfFijo='.$tlfFijo.
+                        '&tlfMovil='.$tlfMovil.
+                        '&direccion='.$direccion.
+                        '&cpostal='.$cp.
+                        '&sexo='.$sexo.
+                        '&tipo='.$tipo;
+                
+                foreach($conocido as $conoce) {
+                    $url = $url.'&conocido[]='.$conoce;
+                }
+                foreach($temas as $tema) {
+                    $url = $url.'&temas[]='.$tema;
+                }
+
+                header($url);
                 exit;
             } else {
                 echo "<ul style='color: #f00;'>";

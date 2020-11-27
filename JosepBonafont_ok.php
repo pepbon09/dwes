@@ -18,6 +18,8 @@
             $cp = $_REQUEST["cpostal"];
             $sexo = $_REQUEST["sexo"];
             $tipo = $_REQUEST["tipo"];
+            $conocido = $_REQUEST["conocido"];
+            $temas = $_REQUEST["temas"];
 
             echo "<p>Usuario: <strong>".strtoupper($usuario)."</strong></p>";
             echo "<p>Nombre: <strong>".strtoupper($nombre)."</strong></p>";
@@ -28,6 +30,16 @@
             echo "<p>C.P.: <strong>".strtoupper($cp)."</strong></p>";
             echo "<p>Sexo: <strong>".strtoupper($sexo)."</strong></p>";
             echo "<p>Tipo de cuenta: <strong>".strtoupper($tipo)."</strong></p>";
+            echo "<p>Nos has conocido mediante: <strong><br>";
+            foreach($conocido as $conoce) {
+                echo "- ".strtoupper($conoce)."<br>";
+            }
+            echo "</strong></p>";
+            echo "<p>Los temas que te interesan son: <strong><br>";
+            foreach($temas as $tema) {
+                echo "- ".strtoupper($tema)."<br>";
+            }
+            echo "</strong></p>";
 
         ?>
     </body>
