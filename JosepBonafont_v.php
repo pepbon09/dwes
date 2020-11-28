@@ -23,7 +23,7 @@ function contraValido($contra) {
 function nombreValido($nombre) {
     if ($nombre == "") {
         return "El campo Nombre esta vacio";
-    } elseif (!ctype_alpha(str_replace(' ','',$nombre))) {
+    } elseif (!ctype_alpha(quitarTildes(str_replace(' ','',$nombre)))) {
         return "El campo Nombre contiene caracteres invalidos (solo letras)";
     } else {
         return "Valido";
@@ -73,7 +73,7 @@ function movilValido($movil) {
 function direccionValido($direccion) {
     if ($direccion == "") {
         return "El campo dirección esta vacio";
-    } elseif (!ctype_alnum(str_replace(' ','',$direccion))) {
+    } elseif (!ctype_alnum(quitarTildes(str_replace(' ','',$direccion)))) {
         return "El campo dirección contiene caracteres invalidos (solo letras y numeros)";
     } else {
         return "Valido";
@@ -133,6 +133,22 @@ function tipoValido($tipo) {
     } else {
         return "Valido";
     }
+}
+
+function quitarTildes($string) {
+    $tildes = array('á','é','í','ó','ú',
+                    'à','è','ì','ò','ù',
+                    'Á','É','Í','Ó','Ú',
+                    'À','È','Ì','Ò','Ù',
+                    'ñ','Ñ','ç','Ç');
+    
+    $reemplazar = array ('a','e','i','o','u',
+                         'a','e','i','o','u',
+                         'A','E','I','O','U',
+                         'A','E','I','O','U',
+                         'n','N','c','C');
+
+    return str_replace($tildes,$reemplazar,$string);
 }
 
 ?>
