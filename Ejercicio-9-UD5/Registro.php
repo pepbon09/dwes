@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<?php session_start(); ?>
+<?php
+session_start();
+$_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
+?>
 <html>
     <head>
         <title>Sesiones 5</title>
     </head>
     <body>
         <form action="Registro.php">
+            <input type="hidden" name="token" value="<?php echo $_SESSION["token"]; ?>">
             <p>Nombre:</p>
             <input type="text" name="nombre"/>
             <p>Apellidos:</p>
@@ -49,16 +53,16 @@
                 if(isset($iniciar)==1) {
                     
                     if($edad=="No" && $cargo=="Si") {
-                        header("Location: sesionDelegado.php");
+                        header("Location: sesionDelegado.php?token=".$_SESSION['token']);
                         exit;
                     } elseif($edad=="Si" && $cargo=="No") {
-                        header("Location: sesionProfesor.php");
+                        header("Location: sesionProfesor.php?token=".$_SESSION['token']);
                         exit;
                     } elseif($edad=="Si" && $cargo=="Si") {
-                        header("Location: sesionDirector.php");
+                        header("Location: sesionDirector.php?token=".$_SESSION['token']);
                         exit;
                     } else {
-                        header("Location: sesionEstudiante.php");
+                        header("Location: sesionEstudiante.php?token=".$_SESSION['token']);
                         exit;
                     }
 
