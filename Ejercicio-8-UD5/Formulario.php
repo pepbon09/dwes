@@ -9,6 +9,7 @@ $trabajadores = array(
     "Trabajador 4" => rand(550,1200),
     "Trabajador 5" => rand(550,1200)
 );
+$_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(24));
 ?>
 <html>
     <head>
@@ -16,6 +17,7 @@ $trabajadores = array(
     </head>
     <body>
         <form action="Formulario.php">
+            <input type="hidden" name="token" value="<?php echo $_SESSION["token"]; ?>">
             <p>Nombre:</p>
             <input type="text" name="nombre"/>
             <p>Empleo:</p>
@@ -37,15 +39,15 @@ $trabajadores = array(
                 if(isset($iniciar)==1) {
                     switch($empleo) {
                         case 'gerente':
-                            header("Location: sesionGerente.php");
+                            header("Location: sesionGerente.php?token=".$_SESSION['token']);
                             exit;
                             break;
                         case 'sindicalista':
-                            header("Location: sesionSindicalista.php");
+                            header("Location: sesionSindicalista.php?token=".$_SESSION['token']);
                             exit;
                             break;
                         case 'nominas':
-                            header("Location: sesionNominas.php");
+                            header("Location: sesionNominas.php?token=".$_SESSION['token']);
                             exit;
                             break;
                     }
